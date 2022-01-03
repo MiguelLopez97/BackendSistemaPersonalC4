@@ -14,6 +14,7 @@ import empleadoRoutes from '../routes/empleado.routes';
 import tallasPrendaRoutes from '../routes/tallas-prenda.routes';
 import gradosAcademicoRoutes from '../routes/grado-academico.routes';
 import catalogoHorariosRoutes from '../routes/catalogo-horario.routes';
+import horarioEmpleadosRoutes from '../routes/horario-empleado.routes';
 
 export class Server {
 
@@ -33,6 +34,7 @@ export class Server {
     tallasPrenda: this.baseUrl + '/TallasPrendas',
     gradosAcademico: this.baseUrl + '/GradosAcademicos',
     catalogoHorarios: this.baseUrl + '/CatalogoHorarios',
+    horarioEmpleados: this.baseUrl + '/HorarioEmpleados',
   }
 
   constructor() {
@@ -83,6 +85,7 @@ export class Server {
     this.app.use(this.apiPaths.tallasPrenda, tallasPrendaRoutes);
     this.app.use(this.apiPaths.gradosAcademico, gradosAcademicoRoutes);
     this.app.use(this.apiPaths.catalogoHorarios, catalogoHorariosRoutes);
+    this.app.use(this.apiPaths.horarioEmpleados, horarioEmpleadosRoutes);
   }
 
   listen()
