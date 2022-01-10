@@ -140,6 +140,9 @@ export const updateEstatusPuesto = async (request: Request, response: Response) 
 
   const estatus = request.query.estatus;
 
+  // const body = request.body
+  // const estatus = body.estatus
+
   if (isNaN(idPuesto))
   { 
     return response.status(400).json({

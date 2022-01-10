@@ -1,35 +1,35 @@
-import { request, Request, Response } from "express";
-import Departamento from '../models/departamento.model';
+import { Request, Response } from "express";
+import altasbajasempleados from "../models/altasbajasempleados.model";
 
-export const getAllDepartamentos = async (request: Request, response: Response) => {
-  const departamentos = await Departamento.findAll();
+export const getAllAltasBajasEmpleados = async ( request: Request, response: Response) => {
 
+  const AltasBajasEmpleados = await altasbajasempleados.findAll();
   response.json({
-    data: departamentos,
+    data: AltasBajasEmpleados,
     success: true,
     message: 'Datos obtenidos correctamente'
   });
 }
 
-export const getDepartamentoById = async (request: Request, response: Response) => {
+export const getAltasBajasEmpleadosById = async (request: Request, response: Response) => {
 
-  const idDepartamento = Number(request.params.idDepartamento);
+  const idAltasBajasEmpleados = Number(request.params.idAltasBajasEmpleados);
 
-  if (isNaN(idDepartamento))
+  if (isNaN(idAltasBajasEmpleados))
   {
     return response.status(400).json({
       data: null,
       success: false,
-      message: 'El idDepartamento no es un valor válido'
+      message: 'El idAltasBajasEmpleados no es un valor válido'
     });
   }
 
-  const departamento = await Departamento.findByPk(idDepartamento);
+  const AltasBajasEmpleados = await altasbajasempleados.findByPk(idAltasBajasEmpleados);
   
-  if (departamento)
+  if (AltasBajasEmpleados)
   {
     response.json({
-      data: departamento,
+      data: AltasBajasEmpleados,
       success: true,
       message: 'Datos obtenidos correctamente'
     });
@@ -37,32 +37,31 @@ export const getDepartamentoById = async (request: Request, response: Response) 
   else
   {
     response.status(404).json({
-      data: departamento,
+      data: AltasBajasEmpleados,
       success: false,
-      message: 'No existe registro con el id ' + idDepartamento
+      message: 'No existe registro con el id ' + AltasBajasEmpleados
     });
   }
 }
 
-export const createDepartamento = async (request: Request, response: Response) => {
+//Crea el control Altas
+export const createAltasBajasEmpleados = async (request: Request, response: Response) => {
   const body = request.body;
 
   try
   {
-    const departamento = Departamento.build(body);
-    await departamento.save();
+    const AltasBajasEmpleados = altasbajasempleados.build(body);
+    await AltasBajasEmpleados.save();
 
     //Guardamos el resultado de la consulta ejecutada
-    const resultCreate: any = departamento;
+    const resultCreate: any = AltasBajasEmpleados;
 
     //Objeto con los datos creados para mandar como respuesta
     const dataCreated = {
-      idDepartamento: resultCreate.null,
-      nombre: resultCreate.nombre,
-      claveDepartamento: resultCreate.claveDepartamento,
-      descripcion: resultCreate.descripcion,
-      extensionTelefono: resultCreate.extensionTelefono,
-      estatus: resultCreate.estatus,
+      idaltasBajasEmpleados: resultCreate.null,
+      fk_idEmpleado: resultCreate.fk_idEmpleado,
+      fecha: resultCreate.fecha,
+      tipo: resultCreate.tipo,
       createdAt: resultCreate.createdAt,
       updatedAt: resultCreate.updatedAt
     };
@@ -83,38 +82,39 @@ export const createDepartamento = async (request: Request, response: Response) =
   }
 }
 
-export const updateDepartamento = async (request: Request, response: Response) => {
+export const updateAltasBajasEmpleados = async (request: Request, response: Response) => {
 
   const body =  request.body;
+  console.log("Pruebaaaaaaa", body);
 
   try
   {
-    //Si en el body del response no viene el 'idDepartamento'
-    if (!body.idDepartamento)
+    //Si en el body del response no viene el 'idAltasBajasEmpleado'
+    if (!body.idaltasBajasEmpleados)
     {
       return response.status(400).json({
         data: null,
         success: false,
-        message: 'El idDepartamento es requerido'
+        message: 'El idAltasBajasEmpleado es requerido'
       });
     }
 
-    const departamento = await Departamento.findByPk(body.idDepartamento);
+    const AltasBajasEmpleados = await altasbajasempleados.findByPk(body.idaltasBajasEmpleados);
 
     //Si no existe registro del idDepartamento proporcionado
-    if (!departamento)
+    if (!AltasBajasEmpleados)
     {
       return response.status(404).json({
-        data: departamento,
+        data: AltasBajasEmpleados,
         success: false,
-        message: 'No existe registro con el id ' + body.idDepartamento
+        message: 'No existe registro con el id ' + body.altasbajasempleados
       });
     }
 
-    await departamento.update(body);
+    await AltasBajasEmpleados.update(body);
 
     response.json({
-      data: departamento,
+      data: AltasBajasEmpleados,
       success: true,
       message: 'Datos actualizados correctamente'
     });
@@ -129,32 +129,34 @@ export const updateDepartamento = async (request: Request, response: Response) =
   }
 }
 
-export const updateEstatusDepartamento = async (request: Request, response: Response) => {
+export const updateEstatusAltasBajasEmpleados = async (request: Request, response: Response) => {
 
-  const idDepartamento = Number(request.params.idDepartamento);
+  const idAltasBajasEmpleados = Number(request.params.idAltasBajasEmpleados);
 
   const estatus = request.query.estatus;
+
+  console.log("Datos", idAltasBajasEmpleados, estatus)
 
   // const body = request.body
   // const estatus = body.estatus
 
-  if (isNaN(idDepartamento))
-  {
+  if (isNaN(idAltasBajasEmpleados))
+  { 
     return response.status(400).json({
       data: null,
       success: false,
-      message: 'El idDepartamento no es un valor válido'
+      message: 'El idEmpleado no es un valor válido'
     });
   }
 
-  const departamento = await Departamento.findByPk(idDepartamento);
+  const AltasBajasEmpleados = await altasbajasempleados.findByPk(idAltasBajasEmpleados);
 
-  if (!departamento)
+  if (!AltasBajasEmpleados)
   {
     return response.status(404).json({
-      data: null,
+      data: AltasBajasEmpleados,
       success: false,
-      message: 'No existe registro con el id ' + idDepartamento
+      message: 'No existe registro con el id ' + AltasBajasEmpleados
     });
   }
 
@@ -171,12 +173,12 @@ export const updateEstatusDepartamento = async (request: Request, response: Resp
   if (estatus == 'true')
   {
     //Si el estatus viene con valor 'true' deshabilita el registro
-    departamento.update({ estatus: false });
+    AltasBajasEmpleados.update({ estatus: false });
   }
   else if (estatus == 'false')
   {
     //Si el estatus viene con valor 'false' habilita el registro
-    departamento.update({ estatus: true });
+    AltasBajasEmpleados.update({ estatus: true });
   }
   else
   {
@@ -188,11 +190,12 @@ export const updateEstatusDepartamento = async (request: Request, response: Resp
   }
 
   response.json({
-    data: departamento,
-    success: true,
-    message: 'Estatus actualizado correctamente'
+    data: AltasBajasEmpleados,
+    success:  true,
+    message: 'Estatus actualizado correctamente',
   });
 }
+
 
 // export const disableDepartamento = async (request: Request, response: Response) => {
 //   const idDepartamento = Number(request.params.idDepartamento);

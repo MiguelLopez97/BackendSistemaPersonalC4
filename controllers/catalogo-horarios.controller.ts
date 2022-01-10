@@ -140,8 +140,10 @@ export const updateHorario = async (request: Request, response: Response) => {
 export const updateEstatusHorario = async (request: Request, response: Response) => {
 
   const idCatalogoHorario = Number(request.params.idCatalogoHorario);
-
   const estatus = request.query.estatus;
+
+  // const body = request.body;
+  // const estatus = body.estatus;
 
   if (isNaN(idCatalogoHorario))
   { 

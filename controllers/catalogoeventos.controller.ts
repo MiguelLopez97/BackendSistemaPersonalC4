@@ -1,35 +1,35 @@
-import { request, Request, Response } from "express";
-import Departamento from '../models/departamento.model';
+import { Request, Response } from "express";
+import catalogoeventos from '../models/catalogoeventos.model';
 
-export const getAllDepartamentos = async (request: Request, response: Response) => {
-  const departamentos = await Departamento.findAll();
+export const getAllCatalogoEventos = async ( request: Request, response: Response) => {
 
+  const CatalogoEventos = await catalogoeventos.findAll();
   response.json({
-    data: departamentos,
+    data: CatalogoEventos,
     success: true,
     message: 'Datos obtenidos correctamente'
   });
 }
 
-export const getDepartamentoById = async (request: Request, response: Response) => {
+export const getCatalogoEventosById = async (request: Request, response: Response) => {
 
-  const idDepartamento = Number(request.params.idDepartamento);
+  const idCatalogoEventos = Number(request.params.idCatalogoEventos);
 
-  if (isNaN(idDepartamento))
+  if (isNaN(idCatalogoEventos))
   {
     return response.status(400).json({
       data: null,
       success: false,
-      message: 'El idDepartamento no es un valor válido'
+      message: 'El idCatalogoEventos no es un valor válido'
     });
   }
 
-  const departamento = await Departamento.findByPk(idDepartamento);
+  const CatalogoEventos = await catalogoeventos.findByPk(idCatalogoEventos);
   
-  if (departamento)
+  if (CatalogoEventos)
   {
     response.json({
-      data: departamento,
+      data: CatalogoEventos,
       success: true,
       message: 'Datos obtenidos correctamente'
     });
@@ -37,31 +37,30 @@ export const getDepartamentoById = async (request: Request, response: Response) 
   else
   {
     response.status(404).json({
-      data: departamento,
+      data: CatalogoEventos,
       success: false,
-      message: 'No existe registro con el id ' + idDepartamento
+      message: 'No existe registro con el id ' + CatalogoEventos
     });
   }
 }
 
-export const createDepartamento = async (request: Request, response: Response) => {
+//Crea el control confianza
+export const createCatalogoEventos = async (request: Request, response: Response) => {
   const body = request.body;
 
   try
   {
-    const departamento = Departamento.build(body);
-    await departamento.save();
+    const CatalogoEventos = catalogoeventos.build(body);
+    await CatalogoEventos.save();
 
     //Guardamos el resultado de la consulta ejecutada
-    const resultCreate: any = departamento;
+    const resultCreate: any = CatalogoEventos;
 
     //Objeto con los datos creados para mandar como respuesta
     const dataCreated = {
-      idDepartamento: resultCreate.null,
+      idEvento: resultCreate.null,
       nombre: resultCreate.nombre,
-      claveDepartamento: resultCreate.claveDepartamento,
       descripcion: resultCreate.descripcion,
-      extensionTelefono: resultCreate.extensionTelefono,
       estatus: resultCreate.estatus,
       createdAt: resultCreate.createdAt,
       updatedAt: resultCreate.updatedAt
@@ -83,38 +82,38 @@ export const createDepartamento = async (request: Request, response: Response) =
   }
 }
 
-export const updateDepartamento = async (request: Request, response: Response) => {
+export const updateCatalogoEventos = async (request: Request, response: Response) => {
 
   const body =  request.body;
 
   try
   {
-    //Si en el body del response no viene el 'idDepartamento'
-    if (!body.idDepartamento)
+    //Si en el body del response no viene el 'idCatalogoConfianza'
+    if (!body.idEvento)
     {
       return response.status(400).json({
         data: null,
         success: false,
-        message: 'El idDepartamento es requerido'
+        message: 'El idCatalogoEvento es requerido'
       });
     }
 
-    const departamento = await Departamento.findByPk(body.idDepartamento);
+    const CatalogoEventos = await catalogoeventos.findByPk(body.idEvento);
 
     //Si no existe registro del idDepartamento proporcionado
-    if (!departamento)
+    if (!CatalogoEventos)
     {
       return response.status(404).json({
-        data: departamento,
+        data: CatalogoEventos,
         success: false,
         message: 'No existe registro con el id ' + body.idDepartamento
       });
     }
 
-    await departamento.update(body);
+    await CatalogoEventos.update(body);
 
     response.json({
-      data: departamento,
+      data: CatalogoEventos,
       success: true,
       message: 'Datos actualizados correctamente'
     });
@@ -129,32 +128,31 @@ export const updateDepartamento = async (request: Request, response: Response) =
   }
 }
 
-export const updateEstatusDepartamento = async (request: Request, response: Response) => {
+export const updateEstatusCatalogoEventos = async (request: Request, response: Response) => {
 
-  const idDepartamento = Number(request.params.idDepartamento);
-
+  const idCatalogoEventos = Number(request.params.idCatalogoEventos);
   const estatus = request.query.estatus;
 
   // const body = request.body
   // const estatus = body.estatus
 
-  if (isNaN(idDepartamento))
+  if (isNaN(idCatalogoEventos))
   {
     return response.status(400).json({
       data: null,
       success: false,
-      message: 'El idDepartamento no es un valor válido'
+      message: 'El idCatalogoEventos no es un valor válido'
     });
   }
 
-  const departamento = await Departamento.findByPk(idDepartamento);
+  const CatalogoEventos = await catalogoeventos.findByPk(idCatalogoEventos);
 
-  if (!departamento)
+  if (!CatalogoEventos)
   {
     return response.status(404).json({
       data: null,
       success: false,
-      message: 'No existe registro con el id ' + idDepartamento
+      message: 'No existe registro con el id ' + idCatalogoEventos
     });
   }
 
@@ -171,12 +169,12 @@ export const updateEstatusDepartamento = async (request: Request, response: Resp
   if (estatus == 'true')
   {
     //Si el estatus viene con valor 'true' deshabilita el registro
-    departamento.update({ estatus: false });
+    CatalogoEventos.update({ estatus: false });
   }
   else if (estatus == 'false')
   {
     //Si el estatus viene con valor 'false' habilita el registro
-    departamento.update({ estatus: true });
+    CatalogoEventos.update({ estatus: true });
   }
   else
   {
@@ -188,7 +186,7 @@ export const updateEstatusDepartamento = async (request: Request, response: Resp
   }
 
   response.json({
-    data: departamento,
+    data: CatalogoEventos,
     success: true,
     message: 'Estatus actualizado correctamente'
   });

@@ -1,35 +1,35 @@
-import { request, Request, Response } from "express";
-import Departamento from '../models/departamento.model';
+import { Request, Response } from "express";
+import controlconfianza from '../models/controlconfianza.model';
 
-export const getAllDepartamentos = async (request: Request, response: Response) => {
-  const departamentos = await Departamento.findAll();
+export const getAllControlConfianza = async ( request: Request, response: Response) => {
 
+  const ControlConfianza = await controlconfianza.findAll();
   response.json({
-    data: departamentos,
+    data: ControlConfianza,
     success: true,
     message: 'Datos obtenidos correctamente'
   });
 }
 
-export const getDepartamentoById = async (request: Request, response: Response) => {
+export const getControlConfianzaById = async (request: Request, response: Response) => {
 
-  const idDepartamento = Number(request.params.idDepartamento);
+  const idControlConfianza = Number(request.params.idControlConfianza);
 
-  if (isNaN(idDepartamento))
+  if (isNaN(idControlConfianza))
   {
     return response.status(400).json({
       data: null,
       success: false,
-      message: 'El idDepartamento no es un valor válido'
+      message: 'El idControlConfianza no es un valor válido'
     });
   }
 
-  const departamento = await Departamento.findByPk(idDepartamento);
+  const Controlconfianza = await controlconfianza.findByPk(idControlConfianza);
   
-  if (departamento)
+  if (Controlconfianza)
   {
     response.json({
-      data: departamento,
+      data: Controlconfianza,
       success: true,
       message: 'Datos obtenidos correctamente'
     });
@@ -37,31 +37,31 @@ export const getDepartamentoById = async (request: Request, response: Response) 
   else
   {
     response.status(404).json({
-      data: departamento,
+      data: Controlconfianza,
       success: false,
-      message: 'No existe registro con el id ' + idDepartamento
+      message: 'No existe registro con el id ' + Controlconfianza
     });
   }
 }
 
-export const createDepartamento = async (request: Request, response: Response) => {
+//Crea el control confianza
+export const createControlConfianza = async (request: Request, response: Response) => {
   const body = request.body;
 
   try
   {
-    const departamento = Departamento.build(body);
-    await departamento.save();
+    const ControlConfianza = controlconfianza.build(body);
+    await ControlConfianza.save();
 
     //Guardamos el resultado de la consulta ejecutada
-    const resultCreate: any = departamento;
+    const resultCreate: any = ControlConfianza;
 
     //Objeto con los datos creados para mandar como respuesta
     const dataCreated = {
-      idDepartamento: resultCreate.null,
-      nombre: resultCreate.nombre,
-      claveDepartamento: resultCreate.claveDepartamento,
-      descripcion: resultCreate.descripcion,
-      extensionTelefono: resultCreate.extensionTelefono,
+      idControlConfianza: resultCreate.null,
+      fk_idEmpleado: resultCreate.fk_idEmpleado,
+      fecha: resultCreate.fecha,
+      resultadp: resultCreate.resultado,
       estatus: resultCreate.estatus,
       createdAt: resultCreate.createdAt,
       updatedAt: resultCreate.updatedAt
@@ -83,14 +83,14 @@ export const createDepartamento = async (request: Request, response: Response) =
   }
 }
 
-export const updateDepartamento = async (request: Request, response: Response) => {
+export const updateControlConfianza = async (request: Request, response: Response) => {
 
   const body =  request.body;
 
   try
   {
-    //Si en el body del response no viene el 'idDepartamento'
-    if (!body.idDepartamento)
+    //Si en el body del response no viene el 'idControlConfianza'
+    if (!body.idControlConfianza)
     {
       return response.status(400).json({
         data: null,
@@ -99,22 +99,22 @@ export const updateDepartamento = async (request: Request, response: Response) =
       });
     }
 
-    const departamento = await Departamento.findByPk(body.idDepartamento);
+    const ControlConfianza = await controlconfianza.findByPk(body.idControlConfianza);
 
     //Si no existe registro del idDepartamento proporcionado
-    if (!departamento)
+    if (!ControlConfianza)
     {
       return response.status(404).json({
-        data: departamento,
+        data: ControlConfianza,
         success: false,
         message: 'No existe registro con el id ' + body.idDepartamento
       });
     }
 
-    await departamento.update(body);
+    await ControlConfianza.update(body);
 
     response.json({
-      data: departamento,
+      data: ControlConfianza,
       success: true,
       message: 'Datos actualizados correctamente'
     });
@@ -129,16 +129,15 @@ export const updateDepartamento = async (request: Request, response: Response) =
   }
 }
 
-export const updateEstatusDepartamento = async (request: Request, response: Response) => {
+export const updateEstatusControlConfianza = async (request: Request, response: Response) => {
 
-  const idDepartamento = Number(request.params.idDepartamento);
-
+  const idControlConfianza = Number(request.params.idControlConfianza);
   const estatus = request.query.estatus;
 
-  // const body = request.body
-  // const estatus = body.estatus
+  // const body = request.body;
+  // const estatus = body.estatus;
 
-  if (isNaN(idDepartamento))
+  if (isNaN(idControlConfianza))
   {
     return response.status(400).json({
       data: null,
@@ -147,14 +146,14 @@ export const updateEstatusDepartamento = async (request: Request, response: Resp
     });
   }
 
-  const departamento = await Departamento.findByPk(idDepartamento);
+  const ControlConfianza = await controlconfianza.findByPk(idControlConfianza);
 
-  if (!departamento)
+  if (!ControlConfianza)
   {
     return response.status(404).json({
       data: null,
       success: false,
-      message: 'No existe registro con el id ' + idDepartamento
+      message: 'No existe registro con el id ' + idControlConfianza
     });
   }
 
@@ -171,12 +170,12 @@ export const updateEstatusDepartamento = async (request: Request, response: Resp
   if (estatus == 'true')
   {
     //Si el estatus viene con valor 'true' deshabilita el registro
-    departamento.update({ estatus: false });
+    ControlConfianza.update({ estatus: false });
   }
   else if (estatus == 'false')
   {
     //Si el estatus viene con valor 'false' habilita el registro
-    departamento.update({ estatus: true });
+    ControlConfianza.update({ estatus: true });
   }
   else
   {
@@ -188,7 +187,7 @@ export const updateEstatusDepartamento = async (request: Request, response: Resp
   }
 
   response.json({
-    data: departamento,
+    data: ControlConfianza,
     success: true,
     message: 'Estatus actualizado correctamente'
   });
