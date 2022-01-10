@@ -138,6 +138,9 @@ export const updateEstatusCorporacion = async (request: Request, response: Respo
 
   const estatus = request.query.estatus;
 
+  // const body = request.body
+  // const estatus = body.estatus
+
   if (isNaN(idCorporacion))
   {
     return response.status(400).json({

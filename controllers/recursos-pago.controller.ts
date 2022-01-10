@@ -129,11 +129,17 @@ export const updateRecursoPago = async (request: Request, response: Response) =>
   }
 }
 
-export const disableRecursoPago = async (request: Request, response: Response) => {
-  const idRecursoPago = Number(request.params.idRecursoPago);
+export const updateEstatusRecursoPago = async (request: Request, response: Response) => {
 
-  if (isNaN(idRecursoPago))
-  {
+  const idPuesto = Number(request.params.idPuesto);
+
+  const estatus = request.query.estatus;
+
+  // const body = request.body
+  // const estatus = body.estatus
+
+  if (isNaN(idPuesto))
+  { 
     return response.status(400).json({
       data: null,
       success: false,
@@ -141,23 +147,82 @@ export const disableRecursoPago = async (request: Request, response: Response) =
     });
   }
 
-  const recursoPago = await RecursoPago.findByPk(idRecursoPago);
+  const Recursopago = await RecursoPago.findByPk(idPuesto);
 
-  if (!recursoPago)
+  if (!Recursopago)
   {
     return response.status(404).json({
-      data: recursoPago,
+      data: Recursopago,
       success: false,
-      message: 'No existe registro con el id ' + idRecursoPago
+      message: 'No existe registro con el id ' + idPuesto
     });
   }
 
-  //Para dar baja lógica a un registro (Update estatus)
-  await recursoPago.update({estatus: false});
+  if (estatus == undefined)
+  {
+    return response.status(400).json({
+      data: null,
+      success: false,
+      message: 'El valor del estatus es requerido (true o false)'
+    });
+  }
+
+  //Habilitar o deshabilitar un registro (Update estatus)
+  if (estatus == 'true')
+  {
+    //Si el estatus viene con valor 'true' deshabilita el registro
+    Recursopago.update({ estatus: false });
+  }
+  else if (estatus == 'false')
+  {
+    //Si el estatus viene con valor 'false' habilita el registro
+    Recursopago.update({ estatus: true });
+  }
+  else
+  {
+    return response.status(400).json({
+      data: null,
+      success: false,
+      message: 'El valor del estatus no es válido (true o false)'
+    });
+  }
 
   response.json({
-    data: recursoPago,
-    success: true,
-    message: 'Estatus actualizado correctamente'
+    data: Recursopago,
+    success:  true,
+    message: 'Estatus actualizado correctamente',
   });
 }
+
+// export const disableRecursoPago = async (request: Request, response: Response) => {
+//   const idRecursoPago = Number(request.params.idRecursoPago);
+
+//   if (isNaN(idRecursoPago))
+//   {
+//     return response.status(400).json({
+//       data: null,
+//       success: false,
+//       message: 'El idRecursoPago no es un valor válido'
+//     });
+//   }
+
+//   const recursoPago = await RecursoPago.findByPk(idRecursoPago);
+
+//   if (!recursoPago)
+//   {
+//     return response.status(404).json({
+//       data: recursoPago,
+//       success: false,
+//       message: 'No existe registro con el id ' + idRecursoPago
+//     });
+//   }
+
+//   //Para dar baja lógica a un registro (Update estatus)
+//   await recursoPago.update({estatus: false});
+
+//   response.json({
+//     data: recursoPago,
+//     success: true,
+//     message: 'Estatus actualizado correctamente'
+//   });
+// }

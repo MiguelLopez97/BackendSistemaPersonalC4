@@ -155,6 +155,9 @@ export const updateEstatusEmpleado = async (request: Request, response: Response
 
   const estatus = request.query.estatus;
 
+  // const body = request.body
+  // const estatus = body.estatus
+
   if (isNaN(idEmpleado))
   { 
     return response.status(400).json({

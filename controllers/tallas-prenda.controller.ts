@@ -191,9 +191,14 @@ export const updateTallaPrenda = async (request: Request, response: Response) =>
   }
 }
 
-export const disableTallaPrenda = async (request: Request, response: Response) => {
+export const updateEstatusTallaPrenda = async (request: Request, response: Response) => {
 
-  const idTallaPrenda = Number(request.params.idTallaPrenda);
+   const idTallaPrenda = Number(request.params.idTallaPrenda);
+
+  const estatus = request.query.estatus;
+
+  // const body = request.body
+  // const estatus = body.estatus
 
   if (isNaN(idTallaPrenda))
   { 
@@ -204,23 +209,83 @@ export const disableTallaPrenda = async (request: Request, response: Response) =
     });
   }
 
-  const tallaPrenda = await TallaPrenda.findByPk(idTallaPrenda);
+  const Tallaprenda= await TallaPrenda.findByPk(idTallaPrenda);
 
-  if (!tallaPrenda)
+  if (!Tallaprenda)
   {
     return response.status(404).json({
-      data: tallaPrenda,
+      data: Tallaprenda,
       success: false,
       message: 'No existe registro con el id ' + idTallaPrenda
     });
   }
 
-  //Para dar baja lógica a un registro (Update estatus)
-  await tallaPrenda.update({ estatus: false });
+  if (estatus == undefined)
+  {
+    return response.status(400).json({
+      data: null,
+      success: false,
+      message: 'El valor del estatus es requerido (true o false)'
+    });
+  }
+
+  //Habilitar o deshabilitar un registro (Update estatus)
+  if (estatus == 'true')
+  {
+    //Si el estatus viene con valor 'true' deshabilita el registro
+    Tallaprenda.update({ estatus: false });
+  }
+  else if (estatus == 'false')
+  {
+    //Si el estatus viene con valor 'false' habilita el registro
+    Tallaprenda.update({ estatus: true });
+  }
+  else
+  {
+    return response.status(400).json({
+      data: null,
+      success: false,
+      message: 'El valor del estatus no es válido (true o false)'
+    });
+  }
 
   response.json({
-    data: tallaPrenda,
-    success: true,
+    data: Tallaprenda,
+    success:  true,
     message: 'Estatus actualizado correctamente',
   });
 }
+
+// export const disableTallaPrenda = async (request: Request, response: Response) => {
+
+//   const idTallaPrenda = Number(request.params.idTallaPrenda);
+
+//   if (isNaN(idTallaPrenda))
+//   { 
+//     return response.status(400).json({
+//       data: null,
+//       success: false,
+//       message: 'El idTallaPrenda no es un valor válido'
+//     });
+//   }
+
+//   const tallaPrenda = await TallaPrenda.findByPk(idTallaPrenda);
+
+//   if (!tallaPrenda)
+//   {
+//     return response.status(404).json({
+//       data: tallaPrenda,
+//       success: false,
+//       message: 'No existe registro con el id ' + idTallaPrenda
+//     });
+//   }
+
+//   //Para dar baja lógica a un registro (Update estatus)
+//   await tallaPrenda.update({ estatus: false });
+
+//   response.json({
+//     data: tallaPrenda,
+//     success: true,
+//     message: 'Estatus actualizado correctamente',
+//   });
+// }

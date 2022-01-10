@@ -1,35 +1,35 @@
-import { request, Request, Response } from "express";
-import Departamento from '../models/departamento.model';
+import { Request, Response } from "express";
+import asignacionguardias from '../models/asignacionguardias.model';
 
-export const getAllDepartamentos = async (request: Request, response: Response) => {
-  const departamentos = await Departamento.findAll();
+export const getAllAsignacionGuardias = async ( request: Request, response: Response) => {
 
+  const AsignacionGuardias = await asignacionguardias.findAll();
   response.json({
-    data: departamentos,
+    data: AsignacionGuardias,
     success: true,
     message: 'Datos obtenidos correctamente'
   });
 }
 
-export const getDepartamentoById = async (request: Request, response: Response) => {
+export const getAsignacionGuardiasById = async (request: Request, response: Response) => {
 
-  const idDepartamento = Number(request.params.idDepartamento);
+  const idAsignacionGuardias = Number(request.params.idAsignacionGuardias);
 
-  if (isNaN(idDepartamento))
+  if (isNaN(idAsignacionGuardias))
   {
     return response.status(400).json({
       data: null,
       success: false,
-      message: 'El idDepartamento no es un valor válido'
+      message: 'El idAsignacionGuardias no es un valor válido'
     });
   }
 
-  const departamento = await Departamento.findByPk(idDepartamento);
+  const AsignacionGuardias = await asignacionguardias.findByPk(idAsignacionGuardias);
   
-  if (departamento)
+  if (AsignacionGuardias)
   {
     response.json({
-      data: departamento,
+      data: AsignacionGuardias,
       success: true,
       message: 'Datos obtenidos correctamente'
     });
@@ -37,31 +37,30 @@ export const getDepartamentoById = async (request: Request, response: Response) 
   else
   {
     response.status(404).json({
-      data: departamento,
+      data: AsignacionGuardias,
       success: false,
-      message: 'No existe registro con el id ' + idDepartamento
+      message: 'No existe registro con el id ' + AsignacionGuardias
     });
   }
 }
 
-export const createDepartamento = async (request: Request, response: Response) => {
+//Crea el control confianza
+export const createAsignacionGuardias = async (request: Request, response: Response) => {
   const body = request.body;
 
   try
   {
-    const departamento = Departamento.build(body);
-    await departamento.save();
+    const AsignacionGuardias = asignacionguardias.build(body);
+    await AsignacionGuardias.save();
 
     //Guardamos el resultado de la consulta ejecutada
-    const resultCreate: any = departamento;
+    const resultCreate: any = AsignacionGuardias;
 
     //Objeto con los datos creados para mandar como respuesta
     const dataCreated = {
-      idDepartamento: resultCreate.null,
-      nombre: resultCreate.nombre,
-      claveDepartamento: resultCreate.claveDepartamento,
-      descripcion: resultCreate.descripcion,
-      extensionTelefono: resultCreate.extensionTelefono,
+      idAsignacionGuardia: resultCreate.null,
+      fk_idEmpleado: resultCreate.fk_idEmpleado,
+      fk_idGuardia: resultCreate.idGuardia,
       estatus: resultCreate.estatus,
       createdAt: resultCreate.createdAt,
       updatedAt: resultCreate.updatedAt
@@ -83,38 +82,38 @@ export const createDepartamento = async (request: Request, response: Response) =
   }
 }
 
-export const updateDepartamento = async (request: Request, response: Response) => {
+export const updateAsignacionGuardias = async (request: Request, response: Response) => {
 
   const body =  request.body;
 
   try
   {
-    //Si en el body del response no viene el 'idDepartamento'
-    if (!body.idDepartamento)
+    //Si en el body del response no viene el 'idControlConfianza'
+    if (!body.idAsignacionGuardia)
     {
       return response.status(400).json({
         data: null,
         success: false,
-        message: 'El idDepartamento es requerido'
+        message: 'El idAsignacionGuardia es requerido'
       });
     }
 
-    const departamento = await Departamento.findByPk(body.idDepartamento);
+    const AsignacionGuardias = await asignacionguardias.findByPk(body.idAsignacionGuardia);
 
     //Si no existe registro del idDepartamento proporcionado
-    if (!departamento)
+    if (!AsignacionGuardias)
     {
       return response.status(404).json({
-        data: departamento,
+        data: AsignacionGuardias,
         success: false,
-        message: 'No existe registro con el id ' + body.idDepartamento
+        message: 'No existe registro con el id ' + body.idAsignacionGuardia
       });
     }
 
-    await departamento.update(body);
+    await AsignacionGuardias.update(body);
 
     response.json({
-      data: departamento,
+      data: AsignacionGuardias,
       success: true,
       message: 'Datos actualizados correctamente'
     });
@@ -129,32 +128,29 @@ export const updateDepartamento = async (request: Request, response: Response) =
   }
 }
 
-export const updateEstatusDepartamento = async (request: Request, response: Response) => {
+export const updateEstatusAsignacionGuardias = async (request: Request, response: Response) => {
 
-  const idDepartamento = Number(request.params.idDepartamento);
+  const idAsignacionGuardias = Number(request.params.idAsignacionGuardias);
 
   const estatus = request.query.estatus;
 
-  // const body = request.body
-  // const estatus = body.estatus
-
-  if (isNaN(idDepartamento))
+  if (isNaN(idAsignacionGuardias))
   {
     return response.status(400).json({
       data: null,
       success: false,
-      message: 'El idDepartamento no es un valor válido'
+      message: 'El idAsignacionGuardias no es un valor válido'
     });
   }
 
-  const departamento = await Departamento.findByPk(idDepartamento);
+  const AsignacionGuardias = await asignacionguardias.findByPk(idAsignacionGuardias);
 
-  if (!departamento)
+  if (!AsignacionGuardias)
   {
     return response.status(404).json({
       data: null,
       success: false,
-      message: 'No existe registro con el id ' + idDepartamento
+      message: 'No existe registro con el id ' + idAsignacionGuardias
     });
   }
 
@@ -171,12 +167,12 @@ export const updateEstatusDepartamento = async (request: Request, response: Resp
   if (estatus == 'true')
   {
     //Si el estatus viene con valor 'true' deshabilita el registro
-    departamento.update({ estatus: false });
+    AsignacionGuardias.update({ estatus: false });
   }
   else if (estatus == 'false')
   {
     //Si el estatus viene con valor 'false' habilita el registro
-    departamento.update({ estatus: true });
+    AsignacionGuardias.update({ estatus: true });
   }
   else
   {
@@ -188,7 +184,7 @@ export const updateEstatusDepartamento = async (request: Request, response: Resp
   }
 
   response.json({
-    data: departamento,
+    data: AsignacionGuardias,
     success: true,
     message: 'Estatus actualizado correctamente'
   });

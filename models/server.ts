@@ -15,6 +15,13 @@ import tallasPrendaRoutes from '../routes/tallas-prenda.routes';
 import gradosAcademicoRoutes from '../routes/grado-academico.routes';
 import catalogoHorariosRoutes from '../routes/catalogo-horario.routes';
 import horarioEmpleadosRoutes from '../routes/horario-empleado.routes';
+import controlconfianzaRoutes from '../routes/controlconfianza.routes';
+import altasbajasempleadosRoutes from '../routes/altasbajasempleados.routes';
+import tiposguardiasRoutes from '../routes/tiposguardias.routes';
+import catalogoguardiasRoutes from '../routes/catalogoguardias.routes';
+import asignacionguardiasRoutes from '../routes/asignacionguardias.routes';
+import catalogoeventosRoutes from '../routes/catalogoeventos.route';
+import registroeventosRoutes from '../routes/registroeventos.route';
 
 export class Server {
 
@@ -35,6 +42,13 @@ export class Server {
     gradosAcademico: this.baseUrl + '/GradosAcademicos',
     catalogoHorarios: this.baseUrl + '/CatalogoHorarios',
     horarioEmpleados: this.baseUrl + '/HorarioEmpleados',
+    controlconfianza: this.baseUrl + '/controlconfianza',
+    altasbajasempleados: this.baseUrl + '/altasbajasempleados',
+    tiposguardias: this.baseUrl + '/tiposguardias',
+    catalogoguardias: this.baseUrl + '/catalogoguardias',
+    asignacionguardias: this.baseUrl + '/asignacionguardias',
+    catalogoeventos: this.baseUrl + '/catalogoeventos',
+    registroeventos: this.baseUrl + '/registroeventos'
   }
 
   constructor() {
@@ -86,6 +100,13 @@ export class Server {
     this.app.use(this.apiPaths.gradosAcademico, gradosAcademicoRoutes);
     this.app.use(this.apiPaths.catalogoHorarios, catalogoHorariosRoutes);
     this.app.use(this.apiPaths.horarioEmpleados, horarioEmpleadosRoutes);
+    this.app.use(this.apiPaths.controlconfianza, controlconfianzaRoutes);
+    this.app.use(this.apiPaths.altasbajasempleados, altasbajasempleadosRoutes);
+    this.app.use(this.apiPaths.tiposguardias, tiposguardiasRoutes);
+    this.app.use(this.apiPaths.catalogoguardias, catalogoguardiasRoutes);
+    this.app.use(this.apiPaths.asignacionguardias, asignacionguardiasRoutes);
+    this.app.use(this.apiPaths.catalogoeventos, catalogoeventosRoutes);
+    this.app.use(this.apiPaths.registroeventos, registroeventosRoutes);
   }
 
   listen()

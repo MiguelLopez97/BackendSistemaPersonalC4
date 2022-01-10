@@ -128,12 +128,15 @@ export const updateGradoAcademico = async (request: Request, response: Response)
   }
 }
 
-export const disableGradoAcademico = async (request: Request, response: Response) => {
+export const updateEstatusGradosAcademicos = async (request: Request, response: Response) => {
 
   const idGradoAcademico = Number(request.params.idGradoAcademico);
+  const estatus = request.query.estatus
+  // const body = request.body;
+  // const estatus = body.estatus;
 
   if (isNaN(idGradoAcademico))
-  { 
+  {
     return response.status(400).json({
       data: null,
       success: false,
@@ -141,23 +144,83 @@ export const disableGradoAcademico = async (request: Request, response: Response
     });
   }
 
-  const gradoAcademico = await GradoAcademico.findByPk(idGradoAcademico);
+  const Gradoacademico = await GradoAcademico.findByPk(idGradoAcademico);
 
-  if (!gradoAcademico)
+  if (!Gradoacademico)
   {
     return response.status(404).json({
-      data: gradoAcademico,
+      data: null,
       success: false,
       message: 'No existe registro con el id ' + idGradoAcademico
     });
   }
 
-  //Para dar baja lógica a un registro (Update estatus)
-  await gradoAcademico.update({ estatus: false });
+  if (estatus == undefined)
+  {
+    return response.status(400).json({
+      data: null,
+      success: false,
+      message: 'El valor del estatus es requerido (true o false)'
+    });
+  }
+
+  //Habilitar o deshabilitar un registro (Update estatus)
+  if (estatus == 'true')
+  {
+    //Si el estatus viene con valor 'true' deshabilita el registro
+    Gradoacademico.update({ estatus: false });
+  }
+  else if (estatus == 'false')
+  {
+    //Si el estatus viene con valor 'false' habilita el registro
+    Gradoacademico.update({ estatus: true });
+  }
+  else
+  {
+    return response.status(400).json({
+      data: null,
+      success: false,
+      message: 'El valor del estatus no es válido (true o false)'
+    });
+  }
 
   response.json({
-    data: gradoAcademico,
+    data: Gradoacademico,
     success: true,
-    message: 'Estatus actualizado correctamente',
+    message: 'Estatus actualizado correctamente'
   });
 }
+
+// export const disableGradoAcademico = async (request: Request, response: Response) => {
+
+//   const idGradoAcademico = Number(request.params.idGradoAcademico);
+
+//   if (isNaN(idGradoAcademico))
+//   { 
+//     return response.status(400).json({
+//       data: null,
+//       success: false,
+//       message: 'El idGradoAcademico no es un valor válido'
+//     });
+//   }
+
+//   const gradoAcademico = await GradoAcademico.findByPk(idGradoAcademico);
+
+//   if (!gradoAcademico)
+//   {
+//     return response.status(404).json({
+//       data: gradoAcademico,
+//       success: false,
+//       message: 'No existe registro con el id ' + idGradoAcademico
+//     });
+//   }
+
+//   //Para dar baja lógica a un registro (Update estatus)
+//   await gradoAcademico.update({ estatus: false });
+
+//   response.json({
+//     data: gradoAcademico,
+//     success: true,
+//     message: 'Estatus actualizado correctamente',
+//   });
+// }
