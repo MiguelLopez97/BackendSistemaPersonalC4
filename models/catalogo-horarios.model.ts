@@ -12,6 +12,9 @@ const CatalogoHorarios = database.define('catalogohorarios', {
   descripcion: {
     type: DataTypes.STRING
   },
+  color: {
+    type: DataTypes.STRING
+  },
   hora_entrada: {
     type: DataTypes.STRING
   },
