@@ -2,7 +2,7 @@ import { Sequelize } from 'sequelize';
 
 //Parámetros para el Sequelize ("nombre_bd", "username", "password") 
 //-----------------DESARROLLO --------------------------
-// const database = new Sequelize('controldepersonal', 'root', '1234', {
+// const database = new Sequelize('controldepersonal', 'Tobi', '1234', {
 //   host: 'localhost',
 //   dialect: 'mysql',
 //   //logging: false
