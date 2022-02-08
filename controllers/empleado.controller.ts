@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Empleado from '../models/empleado.model';
+// const {generarJWT} = require('../helpers/generar-jwt');
 
 export const getAllEmpleados = async (request: Request, response: Response) => {
 
@@ -10,6 +11,7 @@ export const getAllEmpleados = async (request: Request, response: Response) => {
     success: true,
     message: 'Datos obtenidos correctamente'
   });
+
 }
 
 export const getEmpleadoById = async (request: Request, response: Response) => {
@@ -33,8 +35,11 @@ export const getEmpleadoById = async (request: Request, response: Response) => {
       data: empleado,
       success: true,
       message: 'Datos obtenidos correctamente'
+      
     });
+  
   }
+  
   else
   {
     response.status(404).json({

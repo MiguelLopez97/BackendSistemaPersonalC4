@@ -23,6 +23,8 @@ import asignacionguardiasRoutes from '../routes/asignacionguardias.routes';
 import catalogoeventosRoutes from '../routes/catalogoeventos.route';
 import registroeventosRoutes from '../routes/registroeventos.route';
 import configuracionesRoutes from '../routes/configuraciones.route';
+import usersRoutes from '../routes/users.route';
+
 
 export class Server {
 
@@ -50,7 +52,8 @@ export class Server {
     asignacionguardias: this.baseUrl + '/asignacionguardias',
     catalogoeventos: this.baseUrl + '/catalogoeventos',
     registroeventos: this.baseUrl + '/registroeventos',
-    configuraciones: this.baseUrl + '/configuraciones'
+    configuraciones: this.baseUrl + '/configuraciones',
+    users: this.baseUrl + '/users'
   }
 
   constructor() {
@@ -110,6 +113,7 @@ export class Server {
     this.app.use(this.apiPaths.catalogoeventos, catalogoeventosRoutes);
     this.app.use(this.apiPaths.registroeventos, registroeventosRoutes);
     this.app.use(this.apiPaths.configuraciones, configuracionesRoutes);
+    this.app.use(this.apiPaths.users, usersRoutes);
   }
 
   listen()
