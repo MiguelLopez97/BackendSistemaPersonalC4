@@ -20,4 +20,10 @@ const users = database.define('users', {
   }
 });
 
+// users.methods.toJSON = function() {
+//   const {  idUser, ...usuario  } = this.toObject();
+//   usuario.uid = idUser;
+//   return usuario;
+// }
+
 export default users;

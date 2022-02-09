@@ -1,6 +1,6 @@
 import express, { Application } from 'express';
 import cors from 'cors';
-
+const { check } = require('express-validator');
 //Conexión a la base de datos
 import database from '../db/connection';
 

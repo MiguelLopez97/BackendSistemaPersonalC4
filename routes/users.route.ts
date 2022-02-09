@@ -1,5 +1,7 @@
 import { Router } from 'express';
-import {  getAllUsers, getUsersById, createUsers, updateUsers, updateEstatusUsers} from '../controllers/users.controller';
+const {validarJWT} = require('../middlewares/validar-jwt');
+const {esAdminRole,tieneRole} = require('../middlewares/validar-roles');
+import { getAllUsers, getUsersById, createUsers, updateUsers, updateEstatusUsers,ValidacionUsers, /*validarCampos*/ } from '../controllers/users.controller';
 
 const router = Router();
 
@@ -7,5 +9,12 @@ router.get('/', getAllUsers);
 router.get('/:idUsers', getUsersById );
 router.post('/', createUsers );
 router.put('/', updateUsers );
-router.delete('/:idUsers', updateEstatusUsers);
+router.delete('/:idUsers', [ validarJWT,tieneRole('Administrador','Externo','NoseRol')],updateEstatusUsers);
+// router.delete('/', ValidacionUsers);
+
+router.delete('/',[
+    // check('NameUser', 'El correo es obligatorio').isEmail(),
+    // validarCampos
+], ValidacionUsers);
+
 export default router;
