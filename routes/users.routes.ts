@@ -12,7 +12,7 @@ router.put('/', updateUsers );
 router.delete('/:idUsers', [ validarJWT,tieneRole('Administrador','Externo','NoseRol')],updateEstatusUsers);
 // router.delete('/', ValidacionUsers);
 
-router.delete('/',[
+router.post('/Login',[
     // check('NameUser', 'El correo es obligatorio').isEmail(),
     // validarCampos
 ], ValidacionUsers);

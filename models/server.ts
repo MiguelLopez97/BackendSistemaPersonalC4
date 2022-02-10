@@ -20,10 +20,10 @@ import altasbajasempleadosRoutes from '../routes/altasbajasempleados.routes';
 import tiposguardiasRoutes from '../routes/tiposguardias.routes';
 import catalogoguardiasRoutes from '../routes/catalogoguardias.routes';
 import asignacionguardiasRoutes from '../routes/asignacionguardias.routes';
-import catalogoeventosRoutes from '../routes/catalogoeventos.route';
-import registroeventosRoutes from '../routes/registroeventos.route';
-import configuracionesRoutes from '../routes/configuraciones.route';
-import usersRoutes from '../routes/users.route';
+import catalogoeventosRoutes from '../routes/catalogoeventos.routes';
+import registroeventosRoutes from '../routes/registroeventos.routes';
+import configuracionesRoutes from '../routes/configuraciones.routes';
+import usersRoutes from '../routes/users.routes';
 
 
 export class Server {

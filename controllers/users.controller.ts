@@ -207,63 +207,71 @@ export const updateEstatusUsers = async (request: Request, response: Response) =
 export const ValidacionUsers = async (request: Request, response: Response) => {
 
   // const idUsers = Number(request.params.idUsers); //En caso de que sea por Parametro URL 
-   const body = request.body; // Respuesta que trae el cuerpo 
-//Pasaremos a crear las validaciones 
-try {
+  const body = request.body; // Respuesta que trae el cuerpo 
+
+  //Pasaremos a crear las validaciones 
+  try {
   
-  //verificar si el usuario existe
-const idUser = await users.findByPk(body.idUser);
-if(!idUser){
-  return response.status(400).json({
-    msg: "Usuario con id no existe en la base de datos"
-  })
-}
+    //verificar si el usuario existe
+    const usuario: any = await users.findByPk(body.idUser);
+    if(!usuario){
+      return response.status(400).json({
+        msg: "Usuario con id no existe en la base de datos"
+      })
+    }
 
-//si el nombre del usuario concuerda
-// const NameUser = body.NameUser;
-// const usuario = await users.findOne({ where: {NameUser}});
-// console.log("Prueba", NameUser);
-// if(!usuario){
-//   return response.status(400).json({
-//     msg: "Nombre de Usuario no es identificado"
-//   })
-// }
 
-//El estatus es true o false
-const Usuario: any = await users.sequelize?.query("SELECT * FROM users WHERE idUser = ?", {
-  replacements: [body.idUser],
-  model: users,
-  mapToModel: true
-});
+    //si el nombre del usuario concuerda
+    // const NameUser = body.NameUser;
+    // const usuario = await users.findOne({ where: {NameUser}});
+    // console.log("Prueba", NameUser);
+    // if(!usuario){
+    //   return response.status(400).json({
+    //     msg: "Nombre de Usuario no es identificado"
+    //   })
+    // }
 
-if(!Usuario[0].estatus){
-  return response.status(400).json({
-    msg: "El Usuario esta dado de baja"
-  })
-}
-//Validar que usuario y contraseña sean lo mismo
-const PasswordBody = body.PassUser; // es el password que trae en el cuerpo de la respuesta.
-// console.log(PasswordBody, Usuario[0].PassUser); // muestra las dos contraseñas de ambas personas
-if(PasswordBody != Usuario[0].PassUser){ //Si la contraseña que mandamos es igual a la contraseña del usuaria en la base de datos
-  return response.status(400).json({
-    msg: "No son la mismas contraseñas de acorde al Usuario"
-  })
-}
+  //El estatus es true o false
+  if(!usuario.dataValues.estatus) {
+    return response.status(400).json({
+      msg: "El Usuario esta dado de baja"
+    })
+  }
 
-//JWT generar para poder loguearse
-const token = await generarJWT(Usuario[0].idUser);
-  response.json({ 
-    data: idUser,
-    token
-  })
-  
-} catch (error) {
-  console.log(error)
-  return response.status(500).json({
-    msg: 'Hable con el Administrador'
-  });
-  
-}
+  //Validar que usuario y contraseña sean lo mismo
+  const PasswordBody = body.PassUser; // es el password que trae en el cuerpo de la respuesta.
+  // console.log(PasswordBody, Usuario[0].PassUser); // muestra las dos contraseñas de ambas personas
+  if(PasswordBody != usuario.dataValues.PassUser){ //Si la contraseña que mandamos es igual a la contraseña del usuaria en la base de datos
+    return response.status(400).json({
+      msg: "No son la mismas contraseñas de acorde al Usuario"
+    })
+  }
+
+  //JWT generar para poder loguearse
+  const token = await generarJWT(usuario.dataValues.idUser);
+
+  const dataResult = {
+    idUsuario: usuario.dataValues.idUser,
+    fullName: usuario.dataValues.NameUser,
+    rol: usuario.dataValues.UserRol,
+    estatus: usuario.dataValues.estatus,
+    createdAt: usuario.dataValues.createdAt,
+    updatedAt: usuario.dataValues.updatedAt,
+    token: token
+  };
+
+
+    response.json({ 
+      data: dataResult,
+      success: true,
+      message: 'Datos obtenidos correctamente'
+    });
+  } catch (error) {
+    console.log(error)
+    return response.status(500).json({
+      msg: 'Hable con el Administrador'
+    });
+  }
 
 }
 //AQUI ERA ERA UNA FUNCION DE LLAVE PARA VALIDAR CIERTOS CAMPOS
