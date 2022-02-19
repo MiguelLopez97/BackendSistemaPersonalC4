@@ -112,6 +112,7 @@ export const updateUsers = async (request: Request, response: Response) => {
     const Users = await users.findByPk(body.idUser);
 
     //Si no existe registro del idDepartamento proporcionado
+    
     if (!Users)
     {
       return response.status(404).json({
@@ -196,11 +197,21 @@ export const updateEstatusUsers = async (request: Request, response: Response) =
     });
   }
 
+  //Definimos que informacion aparecera del usuario Autenticado que esta solicitando la peticion.
+
+  const resultUsuarioAutenticado = {
+    idUser: UsuarioAuten.dataValues.idUser,
+    NameUser: UsuarioAuten.dataValues.NameUser,
+    UserRol: UsuarioAuten.dataValues.UserRol,
+    estatus: UsuarioAuten.dataValues.estatus
+  };
+
+
   response.json({
     data: Users,
     success: true,
     message: 'Estatus actualizado correctamente',
-    UsuarioAutenticado: UsuarioAuten
+    UsuarioAutenticado: resultUsuarioAutenticado
   });
 }
 
@@ -219,7 +230,6 @@ export const ValidacionUsers = async (request: Request, response: Response) => {
         msg: "Usuario con id no existe en la base de datos"
       })
     }
-
 
     //si el nombre del usuario concuerda
     // const NameUser = body.NameUser;
