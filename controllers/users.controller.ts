@@ -3,6 +3,7 @@ import users from '../models/users.model';
 const { generarJWT } = require('../helpers/generar-jwt');
 
 
+
 export const getAllUsers = async ( request: Request, response: Response) => {
 
   const Users = await users.findAll();

@@ -9,7 +9,7 @@ const Puesto = database.define('puestos', {
   clave: {
     type: DataTypes.STRING
   },
-  nombre: {
+  nombrePuesto: {
     type: DataTypes.STRING
   },
   descripcion: {

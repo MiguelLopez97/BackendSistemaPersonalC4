@@ -6,7 +6,7 @@ const Departamento = database.define('departamentos', {
     type: DataTypes.INTEGER,
     primaryKey: true
   },
-  nombre: {
+  nombreDepartamento: {
     type: DataTypes.STRING
   },
   claveDepartamento: {

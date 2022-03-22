@@ -62,7 +62,7 @@ export const createPuesto = async (request: Request, response: Response) => {
     const dataCreated = {
       idPuesto: resultCreate.null,
       clave: resultCreate.clave,
-      nombre: resultCreate.nombre,
+      nombrePuesto: resultCreate.nombrePuesto,
       descripcion: resultCreate.descripcion,
       idDepartamento: resultCreate.fk_idDepartamento,
       estatus: resultCreate.estatus,
